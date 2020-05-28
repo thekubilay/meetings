@@ -1,25 +1,8 @@
 <template>
-<<<<<<< HEAD
     <header class="">
         <div class="flex around rel header-top">
             <div class="flex column align-hor header-left-sides h-sides">
                 <h1 class="h-title" v-if="this.$route.name == 'home'">応接予約表</h1>
-=======
-    <header class="flex between rel">
-        <div class="flex column align-hor header-left-sides h-sides">
-            <h1 class="h-title">行動予定表</h1>
-            <p class="h-caution">※必ずご自身で入力をお願いします</p>
-        </div>
-        <div class="flex rel align-ver header-right-side h-sides">
-            <div class="date-wrap">
-                <p class="date-txt">{{selected_date}}</p>
-                <date-pick 
-                    v-model="set_date"
-                    :displayFormat="'YYYY.MM.DD'"
-                    :months="months"
-                    :weekdays="weekdays">
-                </date-pick>                 
->>>>>>> 9e0524991420b02f6fe4404a03033f413ff2ffd4
             </div>
             <div class="header-right-side h-sides">
                 <div class="flex rel align-ver">

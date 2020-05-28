@@ -5,11 +5,7 @@
             <div @click="close_add_box()" class="flex align-ver align-hor close pointer"><i class="fas fa-times"></i></div>
             <h3 class="popup-frame-title">備考入力フォーム</h3>
             <textarea rows="4" cols="50" v-model="memo"></textarea>
-<<<<<<< HEAD:src/components/adds/add-reservation-memo.vue
             <button @click="insert_memo()" class="popup-btn btn pointer">備考登録</button>
-=======
-            <button @click="insert_memo()" class="popup-btn btn pointer">メモ登録</button>
->>>>>>> 9e0524991420b02f6fe4404a03033f413ff2ffd4:src/components/adds/add-memo.vue
             {{empty_txt}}
         </div>
     </div>

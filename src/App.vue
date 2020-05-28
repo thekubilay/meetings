@@ -7,11 +7,7 @@
 </template>
 <script>
 import appFooter from "./components/footer"
-<<<<<<< HEAD
 import { mapGetters } from "vuex";
-=======
-import { mapGetters } from 'vuex';
->>>>>>> 9e0524991420b02f6fe4404a03033f413ff2ffd4
 export default {
 	components: {
 		appFooter,
@@ -38,16 +34,8 @@ export default {
 		this.$store.dispatch("load_meeting", {"date":today})     
 		this.$store.dispatch("load_reservation_memo", {"date":today})     
 		this.$store.dispatch("load_setting");
-<<<<<<< HEAD
-		
-		// every 15 min
-		// setTimeout(() => {
-		// 	window.location.reload();
-		// }, this.get_settings[0].update_time * 60 * 1000);
-=======
 
 		// every 15 min
->>>>>>> 9e0524991420b02f6fe4404a03033f413ff2ffd4
 	},
 	methods: {
 		refreshing(){

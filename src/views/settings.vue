@@ -20,15 +20,6 @@
                     <td class="sett-item">1～25（分）で設定</td>
                 </tr>
                 <tr>
-<<<<<<< HEAD
-=======
-                    <td class="sett-item">5</td>
-                    <td class="sett-item">線色 :</td>
-                    <td class="sett-item"><input v-model="color_line" class="setting-input" type="text"></td>
-                    <td class="sett-item">16進数カラーコード</td>
-                </tr>
-                 <tr>
->>>>>>> 9e0524991420b02f6fe4404a03033f413ff2ffd4
                     <td class="sett-item">2</td>
                     <td class="sett-item">線色 :</td>
                     <td class="sett-item"><input v-model="color_line" class="setting-input" type="text"></td>
@@ -47,7 +38,6 @@
                     <td class="sett-item">15文字以内</td>
                 </tr>
                 <tr>
-<<<<<<< HEAD
                     <td class="sett-item">5</td>
                     <td class="sett-item">部屋 No.3 名称 :</td>
                     <td class="sett-item"><input v-model="room_three" maxlength="15" class="setting-input" type="text"></td>
@@ -76,18 +66,6 @@
                     <td class="sett-item">備考 :</td>
                     <td class="sett-item"><input v-model="memo_field" type="checkbox" class="setting-input"></td>
                     <td class="sett-item">応接予約表備考欄の表示</td>
-=======
-                    <td class="sett-item">6</td>
-                    <td class="sett-item">行動予定表メモ連絡 :</td>
-                    <td class="sett-item"><input v-model="memo_field" type="checkbox" class="setting-input"></td>
-                    <td class="sett-item">連絡メモ欄の表示</td>
-                </tr>
-                <tr>
-                    <td class="sett-item">7</td>
-                    <td class="sett-item">行動予定表表枠 :</td>
-                    <td class="sett-item"><input v-model="row_number" class="setting-input" type="text"></td>
-                    <td class="sett-item">1テーブルで適切行数5〜20</td>
->>>>>>> 9e0524991420b02f6fe4404a03033f413ff2ffd4
                 </tr>
             </tbody>
         </table>
@@ -119,7 +97,6 @@ export default {
                 "id": this.get_settings[0].id,
                 "update_time": this.update_time,            
                 "color_line": this.color_line,
-<<<<<<< HEAD
                 "room_one": this.room_one,
                 "room_two": this.room_two,
                 "room_three": this.room_three,
@@ -127,9 +104,6 @@ export default {
                 "room_five": this.room_five,
                 "room_six": this.room_six,
                 "memo_field": this.memo_field == true ? 1 : 0,
-=======
-                "memo_field": this.memo_field == true ? 1 : 0,   
->>>>>>> 9e0524991420b02f6fe4404a03033f413ff2ffd4
             }
             this.$store.dispatch("update_settings", payload)
             this.$router.push({name: "home"})
