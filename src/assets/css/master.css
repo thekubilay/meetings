@@ -1,0 +1,51 @@
+* {
+    box-sizing: border-box
+}
+html, body {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #2f3542;
+    background-color: #F2F2F2;
+}
+html, body a {
+    color: #2f3542;
+    text-decoration: none;
+}
+
+button.btn {
+    background-color: #2f3542;
+    font-size: 14px;
+    color: white;
+}
+
+/* globals */
+.row {
+    width: 1024px;
+}
+.flex {
+    display: flex;
+}
+.column {
+    display: flex;
+    flex-direction: column;
+}
+.between {
+    justify-content: space-between;
+}
+.around {
+    justify-content: space-around;
+}
+.align-ver {
+    align-items: center;
+}
+.align-hor {
+    justify-content: center;
+}
+.pointer {
+    cursor: pointer;
+}
+.grab {
+    cursor: grabbing;
+}
+.rel {
+    position: relative;
+}
