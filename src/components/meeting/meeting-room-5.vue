@@ -38,7 +38,7 @@ export default {
         matched_reservation(time){
             let obj = {}
             this.get_meetings.forEach(item => {
-                if ((item.room_type == this.room_type ) && (item.time <= time && item.finish_time >= time)) {
+                if ((item.room_type == this.room_type ) && (item.start_time <= time && item.finish_time >= time)) {
                     obj = item
                 }
             })
@@ -52,7 +52,7 @@ export default {
             
             // fill the reservation blanks
             this.get_meetings.forEach(item => {
-                if ((item.room_type == this.room_type ) && (item.time <= time && item.finish_time >= time)) {
+                if ((item.room_type == this.room_type ) && (item.start_time <= time && item.finish_time >= time)) {
                     this.$store.state.meeting.reservation.id = item.id
                     this.$store.state.meeting.reservation.old_time = item.old_time
                     this.$store.state.meeting.reservation.finish_time = item.finish_time
