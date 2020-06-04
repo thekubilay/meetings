@@ -82,7 +82,7 @@ export default {
                     // checks for if there is colliding meeting in
                     if (this.get_reservation.id == "") {
                         this.get_meetings.forEach(item => {
-                            if ((item.room_type == this.get_reservation.room_type) && (this.get_reservation.finish_time >= item.time && this.get_reservation.finish_time <= item.time_table)) {                                
+                            if ((item.room_type == this.get_reservation.room_type) && (this.get_reservation.finish_time >= item.time && this.get_reservation.finish_time <= item.finish_time)) {                                
                                 this.err = "終了時間は次の会議の始まる時間に突き当たる"
                                 this.check = false
                             } else {
@@ -94,8 +94,8 @@ export default {
                             let payload =  {
                                 "id": this.get_reservation.id,
                                 "old_time": this.get_reservation.old_time,
-                                "time": this.get_reservation.start_time,
-                                "time_table": this.get_reservation.finish_time,
+                                "start_time": this.get_reservation.start_time,
+                                "finish_time": this.get_reservation.finish_time,
                                 "people": this.get_reservation.people == "" ? null : this.get_reservation.people,
                                 "content": this.get_reservation.content,
                                 "in_charge": this.get_reservation.in_charge,
@@ -114,7 +114,7 @@ export default {
                         }                      
                     } else {
                         this.get_meetings.forEach(item => {
-                            if ((item.id != this.get_reservation.id) && (item.room_type == this.get_reservation.room_type) && (this.get_reservation.finish_time >= item.time && this.get_reservation.finish_time <= item.time_table)) {
+                            if ((item.id != this.get_reservation.id) && (item.room_type == this.get_reservation.room_type) && (this.get_reservation.finish_time >= item.time && this.get_reservation.finish_time <= item.set_finish_time)) {
                                 this.err = "終了時間は次の会議の始まる時間に突き当たる"
                                 this.check = false
                             } else {
@@ -126,8 +126,8 @@ export default {
                             let payload =  {
                                 "id": this.get_reservation.id,
                                 "old_time": this.get_reservation.old_time,
-                                "time": this.get_reservation.start_time,
-                                "time_table": this.get_reservation.finish_time,
+                                "start_time": this.get_reservation.start_time,
+                                "finish_time": this.get_reservation.finish_time,
                                 "people": this.get_reservation.people == "" ? null : this.get_reservation.people,
                                 "content": this.get_reservation.content,
                                 "in_charge": this.get_reservation.in_charge,

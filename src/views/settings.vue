@@ -22,7 +22,7 @@
                 <tr>
                     <td class="sett-item">2</td>
                     <td class="sett-item">線色 :</td>
-                    <td class="sett-item"><input v-model="color_line" class="setting-input" type="text"></td>
+                    <td class="sett-item"><input v-model="line_color" class="setting-input" type="text"></td>
                     <td class="sett-item">16進数カラーコード</td>
                 </tr>
                 <tr>
@@ -64,7 +64,7 @@
                 <tr>
                     <td class="sett-item">9</td>
                     <td class="sett-item">備考 :</td>
-                    <td class="sett-item"><input v-model="memo_field" type="checkbox" class="setting-input"></td>
+                    <td class="sett-item"><input v-model="memo_visible" type="checkbox" class="setting-input"></td>
                     <td class="sett-item">応接予約表備考欄の表示</td>
                 </tr>
             </tbody>
@@ -81,14 +81,14 @@ export default {
     data(){
         return {
             update_time: "",
-            color_line: "",
+            line_color: "",
             room_one:"",
             room_two:"",
             room_three:"",
             room_four:"",
             room_five:"",
             room_six:"",
-            memo_field:"",
+            memo_visible:"",
         }
     },
     methods: {
@@ -120,14 +120,14 @@ export default {
         settings(){
             if (this.get_settings.length) {
                 this.update_time = this.get_settings[0].update_time
-                this.color_line = this.get_settings[0].color_line
+                this.line_color = this.get_settings[0].line_color
                 this.room_one =  this.get_settings[0].room_one
                 this.room_two =  this.get_settings[0].room_two
                 this.room_three =  this.get_settings[0].room_three
                 this.room_four =  this.get_settings[0].room_four
                 this.room_five =  this.get_settings[0].room_five
                 this.room_six =  this.get_settings[0].room_six
-                this.memo_field =  this.get_settings[0].memo_field == 1 ? true : false
+                this.memo_visible =  this.get_settings[0].memo_visible == 1 ? true : false
             }
 
             let title = "設定ファイルの編集/更新"

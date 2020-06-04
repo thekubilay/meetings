@@ -150,6 +150,7 @@ export const meeting = {
         insert_meeting({commit, dispatch, getters}, payload){
             meetingApi.insert_meeting_into_db(payload)
             .then(response => {
+                console.log(response)
                 dispatch("load_meeting", {"date":getters.get_selected_date})
             })
             .catch(err => {
