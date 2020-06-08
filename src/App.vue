@@ -30,33 +30,37 @@ export default {
 		today = yyyy+'-'+mm+'-'+dd;
 
 		this.$store.state.meeting.selected_date = today		
-		this.$store.dispatch("load_meeting", {"date":today})     
+		this.$store.dispatch("load_meeting_times")     
+		this.$store.dispatch("load_meeting_contents", {"date":today})     
 		this.$store.dispatch("load_reservation_memo", {"date":today})     
 		this.$store.dispatch("load_setting");
 
-		// every 15 min
 	},
 	watch: { 
-      	update_time: function(newVal, oldVal) { // watch it
-          	// console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-        }
+      	// update_time: function(newVal, oldVal) { // watch it
+        //   	// console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+        // }
 	},
 	methods: {
-		refreshing(){
-			setTimeout(() => {
-				window.location.reload();				
-			}, this.update_time * 60 * 1000);
-		},
+		// refreshing(){
+		// 	setTimeout(() => {
+		// 		this.$store.dispatch("load_meeting_contents", {"date":this.get_selected_date})     				
+		// 	}, this.update_time * 60 * 1000);
+		// },
 	},
 	computed: {
 		...mapGetters([
+			"get_selected_date",
 			"get_settings",
 			"get_setting_load",
 		]),
 		update_time(){
+			// instead of hard refresh used dipatch call, no need to change the update the 
+			// when opened. 
 			if (this.get_setting_load == 2) {
 				setTimeout(() => {
-					window.location.reload();				
+					this.$store.dispatch("load_meeting_contents", {"date":this.get_selected_date})
+					this.$store.dispatch("load_reservation_memo", {"date":this.get_selected_date})
 				}, this.get_settings[0].update_time * 60 * 1000);				
 			}
 

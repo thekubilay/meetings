@@ -13,11 +13,10 @@ export const meeting = {
             {type:"room_one", name:"大会議室"},{type:"room_two", name:"応接 1 (6人席)"},{type:"room_three", name:"応接 2 (4人席)"},
             {type:"room_four", name:"応接 3 (4人席)"},{type:"room_five", name:"応接 4 (6人席)"}, {type:"room_six", name:"ブース (4人席)"}
         ],        
-        times: ["0900", "0930", "1000", "1030", "1100", "1130", "1200", "1230", "1300", "1330", "1400", "1430", "1500", "1530", "1600", "1630", "1700", "1730", "1800"],
+        times: [],
         reservation: {
             "id": "",
             "room_type": "",
-            "old_time": "",
             "start_time":"",
             "finish_time":"",
             "people": "",
@@ -38,7 +37,16 @@ export const meeting = {
 
     },
     mutations: {
+        set_times(state, times){
+            times.forEach(item => {
+                item.time = item.time.substring(0,5)
+            })
+            state.times = times
+        },
         set_meetings(state, meet){
+            meet.forEach(item => {
+                item.time = item.time.substring(0,5)
+            });
             state.meetings = meet
         },
         set_schedule_load(state, load){
@@ -57,9 +65,6 @@ export const meeting = {
         set_selected_date(state, date){
             state.selected_date = date  
         },
-        set_times(state, times){
-            state.times = times
-        },
         set_rooms(state, rooms){
             state.rooms = rooms
         },
@@ -67,10 +72,10 @@ export const meeting = {
             state.reservation = res
         },
         set_reservation_start_time(state, res){
-            state.reservation.start_time = res
+            state.reservation.start_time = res.time
         },
         set_reservation_finish_time(state, res){
-            state.reservation.finish_time = res
+            state.reservation.finish_time = res.time
         },
         set_reservation_people(state, res){
             state.reservation.people = res
@@ -98,6 +103,9 @@ export const meeting = {
         }
     },
     getters: {
+        get_times(state){
+            return state.times
+        },
         get_meetings(state){
             return state.meetings
         },
@@ -112,9 +120,6 @@ export const meeting = {
         },
         get_selected_date(state){
             return state.selected_date
-        },
-        get_times(state){
-            return state.times
         },
         get_rooms(state){
             return state.rooms
@@ -143,9 +148,18 @@ export const meeting = {
 
     },
     actions: {
-        load_meeting({commit}, payload){
+        load_meeting_times({commit}){
+            meetingApi.get_meeting_times_from_db()
+            .then(response => {
+                this.commit("set_times", response.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        },
+        load_meeting_contents({commit}, payload){
             this.commit("set_meeting_load", 1)
-            meetingApi.get_meeting_from_db(payload)
+            meetingApi.get_meeting_contents(payload)
             .then(response => {
                 this.commit("set_meetings", response.data)
                 this.commit("set_meeting_load", 2)
@@ -157,18 +171,27 @@ export const meeting = {
         },
         insert_meeting({commit, dispatch, getters}, payload){
             meetingApi.insert_meeting_into_db(payload)
-            .then(() => {
-                dispatch("load_meeting", {"date":getters.get_selected_date})
+            .then((response) => {
+                console.log(response.data)
+                dispatch("load_meeting_contents", {"date":getters.get_selected_date})
             })
             .catch(err => {
-                this.commit("set_meeting_load", 3)
                 console.log(err)
             })
         },
-        delete_meeting({commit, dispatch, getters}, payload){
+        update_meeting({commit, dispatch, getters}, payload){
+            meetingApi.update_meeting_in_db(payload)
+            .then(() => {
+                dispatch("load_meeting_contents", {"date":getters.get_selected_date})
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        },
+         delete_meeting({commit, dispatch, getters}, payload){
             meetingApi.delete_meeting_from_db(payload)
             .then(response => {
-                dispatch("load_meeting", {"date":getters.get_selected_date})
+                dispatch("load_meeting_contents", {"date":getters.get_selected_date})
             })
             .catch(err => {
                 this.commit("set_meeting_load", 3)

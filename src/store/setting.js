@@ -2,6 +2,7 @@ import settingApi from "../api/setting.api"
 
 export const setting = {
     state: {
+        
     },
     mutations: {
 

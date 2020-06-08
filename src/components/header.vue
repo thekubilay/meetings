@@ -67,7 +67,7 @@
                 yesterday = yesterday.toISOString().substring(0, 10);
 
                 this.$store.commit("set_selected_date", yesterday);
-                this.$store.dispatch("load_meeting", {
+                this.$store.dispatch("load_meeting_contents", {
                     date: yesterday
                 });
                 this.$store.dispatch("load_reservation_memo", {
@@ -79,7 +79,7 @@
                 today = today.toISOString().substring(0, 10);
 
                 this.$store.commit("set_selected_date", today);
-                this.$store.dispatch("load_meeting", {
+                this.$store.dispatch("load_meeting_contents", {
                     date: today
                 });
                 this.$store.dispatch("load_reservation_memo", {
