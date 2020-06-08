@@ -31,9 +31,15 @@ export default {
     },
     data(){
         return {
+            custom_update_time: 20,
             room_type: "room_one" 
         }
     },
+	watch: { 
+      	update_time: function(newVal, oldVal) { // watch it
+          	console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+        }
+	},
     methods: {        
         matched_reservation(time){
             let obj = {}
@@ -45,6 +51,8 @@ export default {
             return obj
         },
         add_meeting(time){
+            this.$store.state.meeting.settings[0].update_time = 60
+
             this.$store.state.meeting.add_meeting = true
             this.$store.state.meeting.reservation.old_time = time
             this.$store.state.meeting.reservation.start_time = time
@@ -63,6 +71,7 @@ export default {
             });
         }
     },
+
     computed: {
         ...mapGetters([
             "get_times",
@@ -70,7 +79,6 @@ export default {
             "get_settings",
             "get_setting_load",
         ]),
-
     }
 }
 </script>

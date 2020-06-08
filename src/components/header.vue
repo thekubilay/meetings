@@ -261,7 +261,7 @@
 
         header .h-sides button.btn {
             height: 35px;
-            width: 50px;
+            width: 55px;
             font-size: 12px;
         }
 

@@ -4,8 +4,10 @@ export const setting = {
     state: {
     },
     mutations: {
+
     },
     getters: {
+
     },
     actions: {
         update_settings({commit, dispatch, getters}, payload){

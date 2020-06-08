@@ -2,7 +2,7 @@
 	<div id="app">
 		<router-view />
 		<app-footer v-if="this.$route.name != 'panel'" />
-		{{ get_setting_load == 2 ? refreshing() : ""}}
+		{{ get_setting_load == 2 ? update_time : ""}}
 	</div>
 </template>
 <script>
@@ -29,7 +29,6 @@ export default {
 
 		today = yyyy+'-'+mm+'-'+dd;
 
-
 		this.$store.state.meeting.selected_date = today		
 		this.$store.dispatch("load_meeting", {"date":today})     
 		this.$store.dispatch("load_reservation_memo", {"date":today})     
@@ -37,10 +36,15 @@ export default {
 
 		// every 15 min
 	},
+	watch: { 
+      	update_time: function(newVal, oldVal) { // watch it
+          	// console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+        }
+	},
 	methods: {
 		refreshing(){
 			setTimeout(() => {
-				window.location.reload();
+				window.location.reload();				
 			}, this.update_time * 60 * 1000);
 		},
 	},
@@ -51,9 +55,15 @@ export default {
 		]),
 		update_time(){
 			if (this.get_setting_load == 2) {
-				return this.get_settings[0].update_time				
+				setTimeout(() => {
+					window.location.reload();				
+				}, this.get_settings[0].update_time * 60 * 1000);				
 			}
+
+			return ""	
+
 		}
+	
 	}
 }
 </script>

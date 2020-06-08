@@ -6,6 +6,7 @@ export const meeting = {
     state: {
         meetings: [],     
         settings: [],
+        orj_update_time: "",
         setting_load: 0,
         selected_date:"",   
         rooms: [
@@ -46,6 +47,10 @@ export const meeting = {
         set_settings(state, setting){
             state.settings = setting
         },
+        set_orj_update_time(state, orj){
+            state.orj_update_time = orj
+        },
+        
         set_setting_load(state, load){
             state.setting_load = load
         },
@@ -98,6 +103,9 @@ export const meeting = {
         },
         get_settings(state){
             return state.settings;
+        },
+        get_orj_update_time(state){
+            return state.orj_update_time
         },
         get_setting_load(state){
             return state.setting_load;
@@ -174,6 +182,7 @@ export const meeting = {
             settingApi.get_settings_from_db()
             .then(response => {
                 this.commit("set_settings", response.data)
+                this.commit("set_orj_update_time", response.data[0].update_time)
                 this.commit("set_setting_load", 2)
             })
             .catch(err => {

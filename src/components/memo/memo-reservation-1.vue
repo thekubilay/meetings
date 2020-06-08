@@ -44,6 +44,7 @@ export default {
 .memo p.memo-txt {
     margin-top: 15px;
     padding-left: 10px;
+    font-size: 12px;
 }
 .memo-reservation {
     margin-left: 0;

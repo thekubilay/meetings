@@ -20,7 +20,7 @@
                 <p class="flex align-ver align-hor column-title">時間</p>
                 <div class="flex align-ver selects">
                     <select class="time-select" v-model="set_start_time">
-                        <option v-for="(item, index) in get_times" :key="index" :value="item">{{item.match(/../g).join(':')}}</option>
+                        <option v-for="(item, index) in time_after" :key="index" :value="item">{{item.match(/../g).join(':')}}</option>
                     </select> 
                     から
                     <select class="time-select" name="" v-model="set_finish_time">
@@ -72,10 +72,14 @@ export default {
             this.$store.state.meeting.reservation.content = ""
             this.$store.state.meeting.reservation.in_charge = ""
             this.$store.state.meeting.reservation.room_type = ""
+
+            this.$store.state.meeting.settings[0].update_time = this.get_orj_update_time
+
         },
         insert_meeting(btn_type){
             if (btn_type == 1) {
-                if (this.get_reservation.finish_time == "" || this.get_reservation.content == "" || this.get_reservation.in_charge == "") {
+                this.$store.state.meeting.settings[0].update_time = this.get_orj_update_time
+                if (this.get_reservation.finish_time == "" || this.get_reservation.content == "") {
                     this.err = "空のセルを入力してください。"
                 } else {     
 
@@ -113,6 +117,9 @@ export default {
                             this.$store.state.meeting.reservation.room_type = ""
                         }                      
                     } else {
+                        this.$store.state.meeting.settings[0].update_time = this.get_orj_update_time
+
+
                         this.get_meetings.forEach(item => {
                             if ((item.id != this.get_reservation.id) && (item.room_type == this.get_reservation.room_type) && (this.get_reservation.finish_time >= item.time && this.get_reservation.finish_time <= item.set_finish_time)) {
                                 this.err = "終了時間は次の会議の始まる時間に突き当たる"
@@ -151,6 +158,8 @@ export default {
                 }
 
             } else if(btn_type == 2){
+                this.$store.state.meeting.settings[0].update_time = this.get_orj_update_time
+                
                 this.$store.state.meeting.add_meeting = false
                 let payload =  {
                     "id": this.get_reservation.id,                   
@@ -169,7 +178,9 @@ export default {
     },
     computed: {
         ...mapGetters([
+            "get_orj_update_time",
             "get_meetings",
+            "get_prev_time",
             "get_times",
             "get_rooms",
             "get_selected_date",
@@ -215,7 +226,7 @@ export default {
         time_after(){
             let times_arr = []
             this.get_times.forEach(element => {
-                if (element > this.get_reservation.start_time) {
+                if (element >= this.get_reservation.start_time) {
                     times_arr.push(element.toString())
                 }
             });
