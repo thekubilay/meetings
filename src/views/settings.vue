@@ -96,14 +96,14 @@ export default {
             let payload = {
                 "id": this.get_settings[0].id,
                 "update_time": this.update_time,            
-                "color_line": this.color_line,
+                "line_color": this.line_color,
                 "room_one": this.room_one,
                 "room_two": this.room_two,
                 "room_three": this.room_three,
                 "room_four": this.room_four,
                 "room_five": this.room_five,
                 "room_six": this.room_six,
-                "memo_field": this.memo_field == true ? 1 : 0,
+                "memo_visible": this.memo_visible == true ? 1 : 0,
             }
             this.$store.dispatch("update_settings", payload)
             this.$router.push({name: "home"})
