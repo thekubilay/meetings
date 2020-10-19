@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in get_times" :key="index">
+                <tr v-for="(item, index) in strict_time(get_times)" :key="index">
                     <td :style="{borderRight:'2px solid #'+get_settings[0].line_color, borderBottom:'2px solid #'+get_settings[0].line_color}" class="met-item"><button @click="add_meeting(item.time)" class="btn">{{item.time}}</button></td>
                     <td :style="{borderRight:'2px solid #'+get_settings[0].line_color, borderBottom:'2px solid #'+get_settings[0].line_color}" class="met-item"><p>{{matched_reservation(item.time).people}}</p></td>
                     <td :style="{borderRight:'2px solid #'+get_settings[0].line_color, borderBottom:'2px solid #'+get_settings[0].line_color}" class="met-item"><p>{{matched_reservation(item.time).content}}</p></td>
@@ -34,14 +34,25 @@ export default {
             room_type: "room_six" 
         }
     },
-    methods: {        
+    methods: {      
+        strict_time(times)  {
+            let new_times = []
+            times.forEach(item => {
+                if (item.time.replace(":","") < "1830") {
+                    new_times.push(item)
+                }
+            });
+            return new_times
+        },  
         matched_reservation(time){
             // display matched time content
             let obj = {}
-            this.get_meetings.forEach(item => {
-                if (time == item.time && this.room_type == item.room_type) {
-                    obj = item                    
-                }
+            this.get_meetings.forEach(parent => {
+                parent.plan_contents.forEach(item => {
+                    if (time == item.time && this.room_type == item.room_type) {
+                        obj = item                    
+                    }
+                });
             })
 
             return obj
@@ -53,14 +64,19 @@ export default {
             this.$store.state.meeting.reservation.start_time = time
             this.$store.state.meeting.reservation.room_type = this.room_type
             
-            this.get_meetings.forEach(item => {
-                if ((item.room_type == this.room_type) && (item.time == time)) {
-                    this.$store.state.meeting.reservation.id = item.id
-                    this.$store.state.meeting.reservation.people = item.people
-                    this.$store.state.meeting.reservation.content = item.content
-                    this.$store.state.meeting.reservation.in_charge = item.in_charge
-                }
-            });
+            this.get_meetings.forEach(parent => {
+                parent.plan_contents.forEach(item => {
+                    if ((item.room_type == this.room_type) && (item.time == time)) {
+                        this.$store.state.meeting.reservation.id = parent.id
+                        this.$store.state.meeting.reservation.start_time = parent.start_time
+                        this.$store.state.meeting.reservation.finish_time = parent.finish_time
+                        this.$store.state.meeting.reservation.content_id = item.id
+                        this.$store.state.meeting.reservation.people = item.people
+                        this.$store.state.meeting.reservation.content = item.content
+                        this.$store.state.meeting.reservation.in_charge = item.in_charge
+                    }
+                });
+            })
         }
     },
 

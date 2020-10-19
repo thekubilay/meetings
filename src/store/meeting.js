@@ -16,10 +16,11 @@ export const meeting = {
         times: [],
         reservation: {
             "id": "",
+            "content_id": "",
             "room_type": "",
             "start_time":"",
             "finish_time":"",
-            "people": "",
+            "people": null,
             "content": "",
             "in_charge": "",
         },
@@ -44,9 +45,13 @@ export const meeting = {
             state.times = times
         },
         set_meetings(state, meet){
-            meet.forEach(item => {
-                item.time = item.time.substring(0,5)
-            });
+            meet.forEach(parent => {
+                parent.start_time = parent.start_time.substring(0,5)
+                parent.finish_time = parent.finish_time.substring(0,5)
+                parent.plan_contents.forEach(item => {
+                    item.time = item.time.substring(0,5)
+                });
+            })
             state.meetings = meet
         },
         set_schedule_load(state, load){
@@ -172,7 +177,6 @@ export const meeting = {
         insert_meeting({commit, dispatch, getters}, payload){
             meetingApi.insert_meeting_into_db(payload)
             .then((response) => {
-                console.log(response.data)
                 dispatch("load_meeting_contents", {"date":getters.get_selected_date})
             })
             .catch(err => {
@@ -181,7 +185,7 @@ export const meeting = {
         },
         update_meeting({commit, dispatch, getters}, payload){
             meetingApi.update_meeting_in_db(payload)
-            .then(() => {
+            .then((response) => {
                 dispatch("load_meeting_contents", {"date":getters.get_selected_date})
             })
             .catch(err => {

@@ -1,7 +1,7 @@
 <template>
     <div class="memo memo-reservation" v-if="get_setting_load == 2 && get_settings[0].memo_visible == 1">
         <button @click="add_memo()" class="btn">備考</button>
-        <p class="memo-txt" v-if="get_memo_reservation.length">{{memo}}</p>
+        <p class="memo-txt" v-if="get_memo_reservation.length"><span v-for="(item, index) in memo.split('\n')" :key="index">{{item}}</span></p>
     </div>
 </template>
 <script>
@@ -12,6 +12,7 @@ export default {
             this.$store.state.meeting.add_memo_reservation = true
             this.$store.state.meeting.memo_reservation_obj.room_type = "room_one"
         },
+
     },  
     computed: {
         ...mapGetters([            
@@ -45,6 +46,10 @@ export default {
     margin-top: 15px;
     padding-left: 10px;
     font-size: 12px;
+}
+.memo p.memo-txt span {
+    display: block;
+    margin-bottom: 5px;
 }
 .memo-reservation {
     margin-left: 0;

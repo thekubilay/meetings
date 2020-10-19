@@ -1,13 +1,15 @@
 <template>
 	<div id="app">
 		<router-view />
-		<app-footer v-if="this.$route.name != 'panel'" />
+		<app-footer v-if="this.$route.name != 'panel' && this.$route.name != 'login'" />
 		{{ get_setting_load == 2 ? update_time : ""}}
 	</div>
 </template>
 <script>
 import appFooter from "./components/footer"
 import { mapGetters } from "vuex";
+import { authenticationService } from './_services';
+import { Role } from './_helpers';
 export default {
 	components: {
 		appFooter,
@@ -36,18 +38,6 @@ export default {
 		this.$store.dispatch("load_setting");
 
 	},
-	watch: { 
-      	// update_time: function(newVal, oldVal) { // watch it
-        //   	// console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-        // }
-	},
-	methods: {
-		// refreshing(){
-		// 	setTimeout(() => {
-		// 		this.$store.dispatch("load_meeting_contents", {"date":this.get_selected_date})     				
-		// 	}, this.update_time * 60 * 1000);
-		// },
-	},
 	computed: {
 		...mapGetters([
 			"get_selected_date",
@@ -66,6 +56,9 @@ export default {
 
 			return ""	
 
+		},
+		isAdmin () {
+			return this.currentUser && this.currentUser.role === Role.Admin;
 		}
 	
 	}

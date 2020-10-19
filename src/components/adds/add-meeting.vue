@@ -29,10 +29,10 @@
             <div class="flex align-ver box-row">
                 <p class="flex align-ver align-hor column-title">時間</p>
                 <div class="flex align-ver selects" v-if="get_reservation.id == ''">
-                    <!-- <select class="time-select" v-model="set_start_time">
+                    <select class="time-select" v-model="set_start_time">
                         <option v-for="(item, index) in get_times" :key="index" :value="item.time">{{item.time}}</option>
-                    </select>  -->
-                    <p class="time-txt">{{get_reservation.start_time}}</p>
+                    </select> 
+                    <!-- <p class="time-txt">{{get_reservation.start_time}}</p> -->
                     から
                     <select class="time-select" name="" v-model="set_finish_time">
                         <option v-for="(item, index) in time_after" :key="index" :value="item.time">{{item.time}}</option>
@@ -40,6 +40,9 @@
                 </div>
                 <div class="flex align-ver selects" v-else>
                     <p class="time-txt">{{get_reservation.start_time}}</p>
+                    <select class="time-select" name="" v-model="set_finish_time">
+                        <option v-for="(item, index) in time_after" :key="index" :value="item.time">{{item.time}}</option>
+                    </select> 
                 </div>
             </div>
             <div class="flex align-ver box-row">
@@ -57,7 +60,7 @@
             <p class="err-txt" v-if="error != ''">{{error}}</p>
             <div class="flex between btn-wrap">
                 <button @click="insert_meeting(1)" class="btn schedule-btn">使用予定登録</button>
-                <button @click="insert_meeting(2)" class="btn red-bg">予定削除</button>
+                <button @click="insert_meeting(2)" class="btn red-bg">予定を削除</button>
             </div>
         </div>
     </div>
@@ -75,6 +78,7 @@ export default {
         close_add_box(){
 
             this.$store.state.meeting.reservation.id = ""
+            this.$store.state.meeting.reservation.content_id = ""
             this.$store.state.meeting.reservation.finish_time = ""
             this.$store.state.meeting.reservation.people = ""
             this.$store.state.meeting.reservation.content = ""
@@ -104,16 +108,41 @@ export default {
                         }
                     });
 
+                    console.log(payload)
+
+                    // 30 min. one row arrange
+                    if (payload.time_table.length) {
+                        payload.time_table.pop()
+                    }
+
                     // dispatch insert 
                     this.$store.dispatch("insert_meeting", payload)   
 
                 } else {
                     // update selected content etc
                     let payload = {
+                        "time_table": [],   
                         "id": this.get_reservation.id,
+                        "finish_time": this.get_reservation.finish_time,
+                        "content_id": this.get_reservation.content_id,
                         "people": this.get_reservation.people,
                         "content": this.get_reservation.content,
                         "in_charge": this.get_reservation.in_charge,
+                        "room_type": this.get_reservation.room_type,
+                        "created_at": this.get_selected_date,
+                    }
+
+                    // arrange time table of meeting 
+                    // push it to child table as content time.
+                    this.get_times.forEach(element => {
+                        if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
+                            payload.time_table.push(element.time)
+                        }
+                    });
+
+                    // 30 min. one row arrange
+                    if (payload.time_table.length) {
+                        payload.poped = payload.time_table.pop()
                     }
 
                     // dispatch insert 
@@ -121,8 +150,14 @@ export default {
                 }
             } 
             else {
+                let payload = {
+                    "id": this.get_reservation.id,
+                    "finish_time": this.get_reservation.finish_time,
+                    "created_at": this.get_selected_date,
+                }
+
                 // remove selected event
-                this.$store.dispatch("delete_meeting", {"id": this.get_reservation.id})
+                this.$store.dispatch("delete_meeting", payload)
             }
 
             // close form
@@ -140,6 +175,7 @@ export default {
         ...mapGetters([
             "get_times",
             "get_rooms",
+            "get_meetings",
             "get_reservation",
             "get_selected_date",
             "get_settings",
@@ -148,7 +184,7 @@ export default {
         time_after(){
             let times_arr = []
             this.get_times.forEach(element => {
-                if (element.time >= this.get_reservation.start_time) {
+                if (element.time > this.get_reservation.start_time) {
                     times_arr.push(element)
                 }
             });

@@ -92,7 +92,7 @@
                 tomorrow = tomorrow.toISOString().substring(0, 10);
 
                 this.$store.commit("set_selected_date", tomorrow);
-                this.$store.dispatch("load_meeting", {
+                this.$store.dispatch("load_meeting_contents", {
                     date: tomorrow
                 });
                 this.$store.dispatch("load_reservation_memo", {

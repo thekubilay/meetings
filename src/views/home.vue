@@ -47,18 +47,17 @@ export default {
 <style>
 #meeting {
     margin-top: 35px;
- overflow-x: scroll;
+    /* overflow-x: scroll; */
 }
 #meeting .rooms {
     margin: auto;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: flex-start;
     margin-top: 50px;
     width: 1920px;
 }
 @media (max-width: 767px) {
     #meeting .rooms {
-    width: 600px;
+    width: 1500px;
 }
 }
 </style>

@@ -4,7 +4,7 @@ import {API_HANDLER} from "../config";
 export default {
     
     get_settings_from_db(){
-        const username = "prej"
+        const username = "pj-room"
         const password = "X4taLdr"
         var basicAuth = 'Basic ' + btoa(username + ':' + password);
         axios.defaults.headers.common["authorization"] = basicAuth
@@ -12,7 +12,7 @@ export default {
     },        
 
     update_settings_in_db(payload){
-        const username = "prej"
+        const username = "pj-room"
         const password = "X4taLdr"
         var basicAuth = 'Basic ' + btoa(username + ':' + password);
         axios.defaults.headers.common["authorization"] = basicAuth
