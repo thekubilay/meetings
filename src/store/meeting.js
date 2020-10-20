@@ -11,7 +11,7 @@ export const meeting = {
         selected_date:"",   
         rooms: [
             {type:"room_one", name:"大会議室"},{type:"room_two", name:"応接 1 (6人席)"},{type:"room_three", name:"応接 2 (4人席)"},
-            {type:"room_four", name:"応接 3 (4人席)"},{type:"room_five", name:"応接 4 (6人席)"}, {type:"room_six", name:"ブース (4人席)"}
+            {type:"room_four", name:"応接 3 (4人席)"},{type:"room_five", name:"応接 4 (6人席)"}, {type:"room_six", name:"ブース (4人席)"}, {type:"room_seven", name:"社長室"}
         ],        
         times: [],
         reservation: {

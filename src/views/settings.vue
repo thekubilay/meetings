@@ -63,6 +63,12 @@
                 </tr>
                 <tr>
                     <td class="sett-item">9</td>
+                    <td class="sett-item">部屋 No.7 名称 :</td>
+                    <td class="sett-item"><input v-model="room_seven" maxlength="15" class="setting-input" type="text"></td>
+                    <td class="sett-item">15文字以内</td>
+                </tr>
+                <tr>
+                    <td class="sett-item">10</td>
                     <td class="sett-item">備考 :</td>
                     <td class="sett-item"><input v-model="memo_visible" type="checkbox" class="setting-input"></td>
                     <td class="sett-item">応接予約表備考欄の表示</td>
@@ -88,6 +94,7 @@ export default {
             room_four:"",
             room_five:"",
             room_six:"",
+            room_seven:"",
             memo_visible:"",
         }
     },
@@ -103,10 +110,11 @@ export default {
                 "room_four": this.room_four,
                 "room_five": this.room_five,
                 "room_six": this.room_six,
+                "room_seven": this.room_seven,
                 "memo_visible": this.memo_visible == true ? 1 : 0,
             }
             this.$store.dispatch("update_settings", payload)
-            this.$router.push({name: "home"})
+            // this.$router.push({name: "home"})
         },
         return_to(){
             this.$router.push({name: "home"})
@@ -127,6 +135,7 @@ export default {
                 this.room_four =  this.get_settings[0].room_four
                 this.room_five =  this.get_settings[0].room_five
                 this.room_six =  this.get_settings[0].room_six
+                this.room_seven =  this.get_settings[0].room_seven
                 this.memo_visible =  this.get_settings[0].memo_visible == 1 ? true : false
             }
 

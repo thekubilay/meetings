@@ -21,7 +21,8 @@
                             get_reservation.room_type == "room_three" ? "応接 2 (4人席)" : 
                             get_reservation.room_type == "room_four" ? "応接 3 (4人席)" : 
                             get_reservation.room_type == "room_five" ? "応接 4 (6人席)" : 
-                            get_reservation.room_type == "room_six" ? "ブース (4人席)" : ""
+                            get_reservation.room_type == "room_six" ? "ブース (4人席)" : 
+                            get_reservation.room_type == "room_seven" ? "社長室" : ""
                         }}
                     </p>
                 </div>

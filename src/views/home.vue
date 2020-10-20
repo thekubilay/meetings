@@ -2,6 +2,7 @@
     <div id="meeting">
         <app-header />
         <div class="flex align-hor rooms">
+            <app-meeting-seven />
             <app-meeting-one />
             <app-meeting-two />
             <app-meeting-tri />
@@ -21,6 +22,7 @@ import appMeetingTri from '../components/meeting/meeting-room-3'
 import appMeetingFor from '../components/meeting/meeting-room-4'
 import appMeetingFiv from '../components/meeting/meeting-room-5'
 import appMeetingSix from '../components/meeting/meeting-room-6'
+import appMeetingSeven from '../components/meeting/meeting-room-7'
 import appAddMeeting from "../components/adds/add-meeting"
 import appAddMemo from "../components/adds/add-reservation-memo"
 import { mapGetters } from 'vuex'
@@ -33,6 +35,7 @@ export default {
         appMeetingFor,
         appMeetingFiv,
         appMeetingSix,
+        appMeetingSeven,
         appAddMeeting,
         appAddMemo,
     },
