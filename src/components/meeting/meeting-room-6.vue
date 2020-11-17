@@ -1,6 +1,7 @@
 <template>
     <div class="room-table-wrap" v-if="get_setting_load == 2">
         <h5 class="rth">{{get_settings[0].room_six}}</h5>
+        <h4 class="boss--txt"></h4>
         <table :style="{border:'2px solid #'+get_settings[0].line_color}" class="meeting-tables">
             <thead>
                 <tr>

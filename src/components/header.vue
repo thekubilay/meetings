@@ -4,7 +4,15 @@
             <div class="flex column align-hor header-left-sides h-sides">
                 <h1 class="h-title" v-if="this.$route.name == 'home'">応接予約表</h1>
             </div>
-            <div class="header-right-side h-sides">
+
+            <div class="dengon--wrapper">
+                <div class="flex dengon--inner"><button @click="insertDengon(dengon1)">伝言</button><input v-model="dengon1.memo" type="text"></div>
+                <div class="flex dengon--inner"><button @click="insertDengon(dengon2)">伝言</button><input v-model="dengon2.memo" type="text"></div>
+                <div class="flex dengon--inner"><button @click="insertDengon(dengon3)">伝言</button><input v-model="dengon3.memo" type="text"></div>
+                <div class="flex dengon--inner"><button @click="insertDengon(dengon4)">伝言</button><input v-model="dengon4.memo" type="text"></div>
+            </div>
+
+            <div class="header-right-side h-sides column align-ver">
                 <div class="flex rel align-ver">
                     <div class="date-wrap">
                         <p class="date-txt">{{selected_date}}</p>
@@ -52,8 +60,75 @@
                     "12月"
                 ],
                 yesterday_counter: 1,
-                tomorrow_counter: 1
+                tomorrow_counter: 1,
+                dengon1:{id: "", room_type: "dengon1", memo:""}, 
+                dengon2:{id: "", room_type: "dengon2", memo:""}, 
+                dengon3:{id: "", room_type: "dengon3", memo:""}, 
+                dengon4:{id: "", room_type: "dengon4", memo:""}, 
             };
+        },
+        mounted(){
+            this.dengon1 = {id: "", room_type: "dengon1", memo:""}
+            this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
+            this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
+            this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
+            setTimeout(() => {
+                let dengons = []
+                dengons = this.get_memo_reservation.filter(item => {
+                    return item.room_type.match("dengon") && item.created_at == this.get_selected_date
+                })
+                if (dengons.length) {
+                    dengons.forEach(item => {
+                        if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
+                            this.dengon1 = item
+                        } 
+                        else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
+                            this.dengon2 = item
+                        }
+                        else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
+                            this.dengon3 = item
+                        }
+                        else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
+                            this.dengon4 = item
+                        } else {
+                            return;
+                        }
+                    })        
+                }                       
+            }, 500);
+        },
+        watch: {
+            get_selected_date(val){
+                this.dengon1 = {id: "", room_type: "dengon1", memo:""}
+                this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
+                this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
+                this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
+
+                setTimeout(() => {
+                    let dengons = []
+                    dengons = this.get_memo_reservation.filter(item => {
+                        return item.room_type.match("dengon") && item.created_at == val
+                    })
+                    if (dengons.length) {
+                        dengons.forEach(item => {
+                            if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
+                                this.dengon1 = item
+                            } 
+                            else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
+                                this.dengon2 = item
+                            }
+                            else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
+                                this.dengon3 = item
+                            }
+                            else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
+                                this.dengon4 = item
+                            } else {
+                                return;
+                            }
+                        })        
+                    }                       
+                }, 500);
+            },
         },
         methods: {
             update() {
@@ -98,10 +173,17 @@
                 this.$store.dispatch("load_reservation_memo", {
                     date: tomorrow
                 });
+            },
+            insertDengon(dengon){
+                dengon.created_at = this.get_selected_date
+                this.$store.dispatch("insert_reservation_memo", dengon)
             }
         },
         computed: {
-            ...mapGetters(["get_selected_date"]),
+            ...mapGetters([
+                "get_selected_date",
+                "get_memo_reservation",
+            ]),
             set_date: {
                 set(val) {
                     this.yesterday_counter = 1;
@@ -156,122 +238,141 @@
     };
 </script>
 <style>
+header {
+    margin-bottom: 15px;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+header .h-sides h1.h-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #00008b;
+}
+
+header .h-sides p.h-caution {
+    font-size: 14px;
+    margin-top: 10px;
+    color: red;
+}
+header .dengon--wrapper .dengon--inner {
+    padding: 5px;
+    background: white;    
+}
+header .dengon--wrapper .dengon--inner > button {
+    background: #00008b;   
+    color: white;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+header .dengon--wrapper .dengon--inner > input {
+    width: 250px;
+    font-size: 13px;
+    height: 30px;
+    padding-left: 10px;
+}
+
+header .h-sides button.btn {
+    height: 35px;
+    width: 60px;
+}
+
+header .h-sides .date-wrap {
+    margin-right: 25px;
+}
+
+header .h-sides .date-wrap p.date-txt {
+    font-size: 24px;
+    z-index: 2;
+    right: 115px;
+    /* position: relative; */
+    z-index: 1;
+    color: #00008b;
+}
+
+header .h-sides .date-wrap .vdpComponent {
+    position: absolute;
+    top: 0;
+
+    left: 0;
+    z-index: 10;
+}
+
+header .h-sides .date-wrap .vdpComponent input {
+    height: 50px;
+    cursor: pointer;
+    width: 270px;
+    opacity: 0;
+}
+
+header .h-sides .date-wrap .vdpComponent .vdpClearInput {
+    display: none;
+}
+header .header-right-side {
+    margin: auto 0;
+}
+header .header-day-btns {
+    margin: 25px auto 0;
+    width: 340px;
+}
+
+header .header-day-btns button.btn {
+    width: 75px;
+    height: 30px;
+    font-size: 12px;
+}
+
+header .header-day-btns button.btn.today-btn {
+    width: 80px;
+    height: 30px;
+    font-size: 12px;
+}
+
+@media screen and (max-width: 1100px) {
     header {
         margin-bottom: 15px;
-        margin-left: 25px;
-        margin-right: 25px;
+        margin-left: 15px;
+        margin-right: 15px;
     }
+}
 
+@media screen and (max-width: 600px) {
     header .h-sides h1.h-title {
-        font-size: 26px;
-        font-weight: 600;
-        color: #00008b;
+        font-size: 16px;
     }
 
     header .h-sides p.h-caution {
+        font-size: 10px;
+    }
+
+    header .h-sides .date-wrap {
+        margin-right: 10px;
+    }
+
+    header .h-sides .date-wrap .vdpComponent input {
+        height: 35px;
+        width: 150px;
+        opacity: 0;
+    }
+
+    header .h-sides .date-wrap p.date-txt {
         font-size: 14px;
-        margin-top: 10px;
-        color: red;
     }
 
     header .h-sides button.btn {
         height: 35px;
-        width: 60px;
+        width: 55px;
+        font-size: 12px;
     }
 
-    header .h-sides .date-wrap {
-        margin-right: 25px;
-    }
-
-    header .h-sides .date-wrap p.date-txt {
-        font-size: 24px;
-        z-index: 2;
-        right: 115px;
-        /* position: relative; */
-        z-index: 1;
-        color: #00008b;
-    }
-
-    header .h-sides .date-wrap .vdpComponent {
-        position: absolute;
-        top: 0;
-
-        left: 0;
-        z-index: 10;
-    }
-
-    header .h-sides .date-wrap .vdpComponent input {
-        height: 50px;
-        cursor: pointer;
-        width: 270px;
-        opacity: 0;
-    }
-
-    header .h-sides .date-wrap .vdpComponent .vdpClearInput {
-        display: none;
+    header .header-bottom {
+        margin: 25px auto 0;
+        width: 95%;
     }
 
     header .header-day-btns {
-        margin: 25px auto 0;
-        width: 340px;
+        width: 200px;
     }
-
-    header .header-day-btns button.btn {
-        width: 75px;
-        height: 30px;
-        font-size: 12px;
-    }
-
-    header .header-day-btns button.btn.today-btn {
-        width: 80px;
-        height: 30px;
-        font-size: 12px;
-    }
-
-    @media screen and (max-width: 1100px) {
-        header {
-            margin-bottom: 15px;
-            margin-left: 15px;
-            margin-right: 15px;
-        }
-    }
-
-    @media screen and (max-width: 600px) {
-        header .h-sides h1.h-title {
-            font-size: 16px;
-        }
-
-        header .h-sides p.h-caution {
-            font-size: 10px;
-        }
-
-        header .h-sides .date-wrap {
-            margin-right: 10px;
-        }
-
-        header .h-sides .date-wrap .vdpComponent input {
-            height: 35px;
-            width: 150px;
-            opacity: 0;
-        }
-
-        header .h-sides .date-wrap p.date-txt {
-            font-size: 14px;
-        }
-
-        header .h-sides button.btn {
-            height: 35px;
-            width: 55px;
-            font-size: 12px;
-        }
-
-        header .header-bottom {
-            margin: 25px auto 0;
-            width: 95%;
-        }
-
-        header .header-day-btns {
-            width: 200px;
-        }
-    }
+}
 </style>
