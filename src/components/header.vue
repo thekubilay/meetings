@@ -23,10 +23,12 @@
                 </div>
 
                 <div class="flex between header-day-btns">
+                    <button class="btn" @click="lastWeek()">< 先週</button> 
                     <button class="btn" @click="yesterday()">
                         < 前日</button> <button class="btn today-btn" @click="today()">本日の予約
                     </button>
                     <button class="btn" @click="tomorrow()">翌日 ></button>
+                    <button class="btn" @click="nextWeek()">来週 ></button>
                 </div>
             </div>
         </div>
@@ -59,6 +61,8 @@
                     "11月",
                     "12月"
                 ],
+                lastWeek_counter: 7,
+                nextWeek_counter: 7,
                 yesterday_counter: 1,
                 tomorrow_counter: 1,
                 dengon1:{id: "", room_type: "dengon1", memo:""}, 
@@ -136,6 +140,16 @@
                     date: this.date
                 });
             },
+            lastWeek() {
+                var lastWeek = new Date(this.get_selected_date);
+                lastWeek.setDate(lastWeek.getDate() - this.lastWeek_counter);
+                lastWeek = lastWeek.toISOString().substring(0,10);
+
+                this.$store.commit("set_selected_date",lastWeek);
+                this.$store.dispatch("load_meeting_contents",{
+                    date:lastWeek
+                });
+            },
             yesterday() {
                 var yesterday = new Date(this.get_selected_date);
                 yesterday.setDate(yesterday.getDate() - this.yesterday_counter);
@@ -174,6 +188,19 @@
                     date: tomorrow
                 });
             },
+            nextWeek() {
+                var nextWeek = new Date(this.get_selected_date);
+                nextWeek.setDate(nextWeek.getDate() + this.nextWeek_counter);
+                nextWeek = nextWeek.toISOString().substring(0, 10);
+
+                this.$store.commit("set_selected_date", nextWeek);
+                this.$store.dispatch("load_meeting_contents", {
+                    date: nextWeek
+                });
+                this.$store.dispatch("load_reservation_memo", {
+                    date: nextWeek
+                });
+            },
             insertDengon(dengon){
                 dengon.created_at = this.get_selected_date
                 this.$store.dispatch("insert_reservation_memo", dengon)
@@ -186,6 +213,8 @@
             ]),
             set_date: {
                 set(val) {
+                    this.lastWeek_counter = 7;
+                    (this.nextWeek_counter = 7),
                     this.yesterday_counter = 1;
                     (this.tomorrow_counter = 1),
                     this.$store.commit("set_selected_date", val);
@@ -314,7 +343,7 @@ header .header-right-side {
 }
 header .header-day-btns {
     margin: 25px auto 0;
-    width: 340px;
+    width: 400px;
 }
 
 header .header-day-btns button.btn {
