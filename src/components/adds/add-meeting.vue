@@ -264,9 +264,25 @@ export default {
             get(){
                 return this.$store.state.meeting.reservation.in_charge
             }
+        },
+        defaultFinishTime() {
+            const targeTime = this.get_times.find((t) => t.time === this.set_start_time);
+            const targeTimeId = Number(targeTime.id) + 1;
+            const defaultFinishTimeId = this.get_times.find((t) => t.id === String(targeTimeId));
+            const defaultFinishTime = defaultFinishTimeId.time;
+            this.set_finish_time = defaultFinishTime;
+        }
+    },
+    mounted(){
+        this.defaultFinishTime;
+    },
+    watch:{
+        set_start_time: function(){
+            this.defaultFinishTime;
         }
     }
 }
+
 </script>
 <style>
 .popup-bg {
