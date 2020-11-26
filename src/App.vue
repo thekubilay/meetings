@@ -51,7 +51,7 @@ export default {
 				setTimeout(() => {
 					this.$store.dispatch("load_meeting_contents", {"date":this.get_selected_date})
 					this.$store.dispatch("load_reservation_memo", {"date":this.get_selected_date})
-				}, this.get_settings[0].update_time * 60 * 1000);				
+				}, this.get_settings[0].update_time * 60 * 1000);			
 			}
 
 			return ""	

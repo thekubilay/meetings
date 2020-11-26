@@ -11,7 +11,7 @@
             <div class="flex align-ver box-row">
                 <p class="flex align-ver align-hor column-title">会議室</p>
                 <div class="flex align-ver selects">
-                    <select class="room-select" v-model="get_reservation.room_type" v-if="get_reservation.id == ''">
+                    <select class="room-select" v-model="get_reservation.room_type" v-if="get_reservation.id == ''" @change="contentCheck()" >
                         <option v-for="(item, index) in get_rooms" :key="index" :value="item.type">{{item.name}}</option>
                     </select> 
                     <p v-else>
@@ -30,12 +30,12 @@
             <div class="flex align-ver box-row">
                 <p class="flex align-ver align-hor column-title">時間</p>
                 <div class="flex align-ver selects" v-if="get_reservation.id == ''">
-                    <select class="time-select" v-model="set_start_time">
+                    <select class="time-select" v-model="set_start_time" @change="contentCheck()">
                         <option v-for="(item, index) in get_times" :key="index" :value="item.time">{{item.time}}</option>
                     </select> 
                     <!-- <p class="time-txt">{{get_reservation.start_time}}</p> -->
                     から
-                    <select class="time-select" name="" v-model="set_finish_time">
+                    <select class="time-select" name="" v-model="set_finish_time" @change="contentCheck()">
                         <option v-for="(item, index) in time_after" :key="index" :value="item.time">{{item.time}}</option>
                     </select> 
                 </div>
@@ -58,7 +58,7 @@
                 <p class="flex align-ver align-hor column-title">担当者</p>
                 <input class="column-input" maxlength="15" v-model="set_in_charge" type="text">
             </div>
-            <p class="err-txt" v-if="error != ''">{{error}}</p>
+            <p class="err-txt" v-if="check" style="white-space:pre-wrap; word-wrap:break-word;text-align:center;">{{error}}</p>
             <div class="flex between btn-wrap">
                 <button @click="insert_meeting(1)" class="btn schedule-btn">使用予定登録</button>
                 <button @click="insert_meeting(2)" class="btn red-bg">予定を削除</button>
@@ -71,8 +71,9 @@ import { mapGetters } from 'vuex'
 export default {
     data(){
         return {    
-            error: "",
-            check: true,
+            error: `すでに予約が入っています。
+登録すると予約は上書きされます。`,
+            check: false,
         }
     },
     methods: {
@@ -170,6 +171,39 @@ export default {
             this.$store.state.meeting.reservation.in_charge = ""
             this.$store.state.meeting.reservation.room_type = ""
             this.$store.state.meeting.add_meeting = false
+        },
+        contentCheck(){
+            let meetingsFirstArray = this.$store.state.meeting.meetings;
+            let meetingsFirstArraytest = this.$store.state.meeting.reservation.room_type;
+            let meetingsSecondArray = [];
+            let meetingsExistTimeArray = [];
+            this.check = false;
+            
+            const self  = this
+            const targeTime = this.get_times.find((t) => t.time == this.set_finish_time);
+            const targeTimeId = parseInt(targeTime.id) - 1;
+            const targetFinishTimeId = this.get_times.find((v) => v.id == String(targeTimeId));
+            const targetFinishTime = targetFinishTimeId.time;
+
+            meetingsFirstArray.forEach(item => {
+                meetingsSecondArray.push(item.plan_contents);
+            });
+            meetingsSecondArray.forEach( function( value, index ) {
+                value.forEach(item => {
+                    if((item.content !== "") && (item.room_type == self.get_reservation.room_type)){
+                        console.log(item)
+                        let meetingsExistTime = item.time;
+                        if(meetingsExistTime >= self.set_start_time && meetingsExistTime <= targetFinishTime){
+                            meetingsExistTimeArray.push(meetingsExistTime);
+                        }
+                    }
+                });
+            });
+            if(meetingsExistTimeArray.length !== 0) {
+                self.check = true;
+            }else{
+                self.check = false;
+            }
         }
     },
     computed: {
@@ -180,7 +214,10 @@ export default {
             "get_reservation",
             "get_selected_date",
             "get_settings",
-            "get_setting_load"
+            "get_setting_load",
+            "get_reservation_start_time",
+            "get_reservation_finish_time",
+            "get_reservation_people"
         ]),
         time_after(){
             let times_arr = []
@@ -267,20 +304,17 @@ export default {
         },
         defaultFinishTime() {
             const targeTime = this.get_times.find((t) => t.time === this.set_start_time);
-            const targeTimeId = Number(targeTime.id) + 1;
+            const targeTimeId = parseInt(targeTime.id) + 1;
             const defaultFinishTimeId = this.get_times.find((t) => t.id === String(targeTimeId));
             const defaultFinishTime = defaultFinishTimeId.time;
             this.set_finish_time = defaultFinishTime;
-        }
+        },
+        
     },
     mounted(){
         this.defaultFinishTime;
+        this.contentCheck();
     },
-    watch:{
-        set_start_time: function(){
-            this.defaultFinishTime;
-        }
-    }
 }
 
 </script>

@@ -75,9 +75,10 @@ export default {
                         this.$store.state.meeting.reservation.people = item.people
                         this.$store.state.meeting.reservation.content = item.content
                         this.$store.state.meeting.reservation.in_charge = item.in_charge
-                    }
+                    };
                 });
             })
+            
         }
     },
 
@@ -89,7 +90,7 @@ export default {
             "get_settings",
             "get_setting_load",
         ]),
-    }
+    },
 }
 </script>
 <style>

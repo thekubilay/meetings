@@ -105,6 +105,9 @@ export const meeting = {
         },
         set_add_memo_reservation(state, add){
             state.add_memo_reservation = add
+        },
+        set_meeting_check_error(state, add){
+            state.meeting.check_error = add
         }
     },
     getters: {
@@ -149,6 +152,18 @@ export const meeting = {
         },
         get_add_memo_reservation(state){
             return state.add_memo_reservation
+        },
+        get_reservation_start_time(state){
+            return state.reservation.start_time
+        },
+        get_reservation_finish_time(state){
+            return state.reservation.finish_time
+        },
+        get_reservation_people(state){
+            return state.reservation.people
+        },
+        get_reservation_people(state){
+            return state.reservation.people
         }
 
     },
