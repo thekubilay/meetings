@@ -110,7 +110,6 @@ export default {
                         }
                     });
 
-                    console.log(payload)
 
                     // 30 min. one row arrange
                     if (payload.time_table.length) {
