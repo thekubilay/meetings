@@ -19,7 +19,7 @@
                         <date-pick v-model="set_date" :displayFormat="'YYYY.MM.DD'" :months="months"
                             :weekdays="weekdays"></date-pick>
                     </div>
-                    <button class="btn">更新</button>
+                    <button class="btn" @click="reload()">更新</button>
                 </div>
 
                 <div class="flex between header-day-btns">
@@ -204,6 +204,9 @@
             insertDengon(dengon){
                 dengon.created_at = this.get_selected_date
                 this.$store.dispatch("insert_reservation_memo", dengon)
+            },
+            reload() {
+                window.location.reload();
             }
         },
         computed: {
