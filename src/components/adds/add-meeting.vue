@@ -190,7 +190,6 @@ export default {
             meetingsSecondArray.forEach( function( value, index ) {
                 value.forEach(item => {
                     if((item.content !== "") && (item.room_type == self.get_reservation.room_type)){
-                        console.log(item)
                         let meetingsExistTime = item.time;
                         if(meetingsExistTime >= self.set_start_time && meetingsExistTime <= targetFinishTime){
                             meetingsExistTimeArray.push(meetingsExistTime);
