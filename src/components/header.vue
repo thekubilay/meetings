@@ -157,6 +157,9 @@
                 this.$store.dispatch("load_meeting_contents",{
                     date:lastWeek
                 });
+                this.$store.dispatch("load_reservation_memo", {
+                    date: lastWeek
+                });
             },
             yesterday() {
                 var yesterday = new Date(this.get_selected_date);
