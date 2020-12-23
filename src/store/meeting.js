@@ -34,7 +34,8 @@ export const meeting = {
             "room_type": "",
         },
         add_memo_reservation: false,
-        
+        //dengon
+        add_dengon: false,
 
     },
     mutations: {
@@ -108,7 +109,10 @@ export const meeting = {
         },
         set_meeting_check_error(state, add){
             state.meeting.check_error = add
-        }
+        },
+        set_add_dengon(state, add){
+            state.add_dengon = add
+        },
     },
     getters: {
         get_times(state){
@@ -164,7 +168,10 @@ export const meeting = {
         },
         get_reservation_people(state){
             return state.reservation.people
-        }
+        },
+        get_add_dengon(state){
+            return state.add_dengon
+        },
 
     },
     actions: {

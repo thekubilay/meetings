@@ -6,10 +6,10 @@
             </div>
 
             <div class="dengon--wrapper">
-                <div class="flex dengon--inner"><button @click="insertDengon(dengon1)">伝言</button><input v-model="dengon1.memo" type="text"></div>
-                <div class="flex dengon--inner"><button @click="insertDengon(dengon2)">伝言</button><input v-model="dengon2.memo" type="text"></div>
-                <div class="flex dengon--inner"><button @click="insertDengon(dengon3)">伝言</button><input v-model="dengon3.memo" type="text"></div>
-                <div class="flex dengon--inner"><button @click="insertDengon(dengon4)">伝言</button><input v-model="dengon4.memo" type="text"></div>
+                    <app-dengon-one />
+                    <app-dengon-two />
+                    <app-dengon-three />
+                    <app-dengon-four />
             </div>
 
             <div class="header-right-side h-sides column align-ver">
@@ -37,12 +37,20 @@
 <script>
     import DatePick from "vue-date-pick";
     import "vue-date-pick/dist/vueDatePick.css";
+    import appDengonOne from "../components/dengon/dengon-1"
+    import appDengonTwo from "../components/dengon/dengon-2"
+    import appDengonThree from "../components/dengon/dengon-3"
+    import appDengonFour from "../components/dengon/dengon-4"
     import {
         mapGetters
     } from "vuex";
     export default {
         components: {
-            DatePick
+            DatePick,
+            appDengonOne,
+            appDengonTwo,
+            appDengonThree,
+            appDengonFour
         },
         data() {
             return {
@@ -65,75 +73,75 @@
                 nextWeek_counter: 7,
                 yesterday_counter: 1,
                 tomorrow_counter: 1,
-                dengon1:{id: "", room_type: "dengon1", memo:""}, 
-                dengon2:{id: "", room_type: "dengon2", memo:""}, 
-                dengon3:{id: "", room_type: "dengon3", memo:""}, 
-                dengon4:{id: "", room_type: "dengon4", memo:""}, 
+                // dengon1:{id: "", room_type: "dengon1", memo:""}, 
+                // dengon2:{id: "", room_type: "dengon2", memo:""}, 
+                // dengon3:{id: "", room_type: "dengon3", memo:""}, 
+                // dengon4:{id: "", room_type: "dengon4", memo:""}, 
             };
         },
-        mounted(){
-            this.dengon1 = {id: "", room_type: "dengon1", memo:""}
-            this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
-            this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
-            this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
-            setTimeout(() => {
-                let dengons = []
-                dengons = this.get_memo_reservation.filter(item => {
-                    return item.room_type.match("dengon") && item.created_at == this.get_selected_date
-                })
-                if (dengons.length) {
-                    dengons.forEach(item => {
-                        if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
-                            this.dengon1 = item
-                        } 
-                        else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
-                            this.dengon2 = item
-                        }
-                        else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
-                            this.dengon3 = item
-                        }
-                        else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
-                            this.dengon4 = item
-                        } else {
-                            return;
-                        }
-                    })        
-                }                       
-            }, 500);
-        },
-        watch: {
-            get_selected_date(val){
-                this.dengon1 = {id: "", room_type: "dengon1", memo:""}
-                this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
-                this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
-                this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
+        // mounted(){
+        //     this.dengon1 = {id: "", room_type: "dengon1", memo:""}
+        //     this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
+        //     this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
+        //     this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
+        //     setTimeout(() => {
+        //         let dengons = []
+        //         dengons = this.get_memo_reservation.filter(item => {
+        //             return item.room_type.match("dengon") && item.created_at == this.get_selected_date
+        //         })
+        //         if (dengons.length) {
+        //             dengons.forEach(item => {
+        //                 if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
+        //                     this.dengon1 = item
+        //                 } 
+        //                 else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
+        //                     this.dengon2 = item
+        //                 }
+        //                 else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
+        //                     this.dengon3 = item
+        //                 }
+        //                 else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
+        //                     this.dengon4 = item
+        //                 } else {
+        //                     return;
+        //                 }
+        //             })        
+        //         }                       
+        //     }, 500);
+        // },
+        // watch: {
+        //     get_selected_date(val){
+        //         this.dengon1 = {id: "", room_type: "dengon1", memo:""}
+        //         this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
+        //         this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
+        //         this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
 
-                setTimeout(() => {
-                    let dengons = []
-                    dengons = this.get_memo_reservation.filter(item => {
-                        return item.room_type.match("dengon") && item.created_at == val
-                    })
-                    if (dengons.length) {
-                        dengons.forEach(item => {
-                            if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
-                                this.dengon1 = item
-                            } 
-                            else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
-                                this.dengon2 = item
-                            }
-                            else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
-                                this.dengon3 = item
-                            }
-                            else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
-                                this.dengon4 = item
-                            } else {
-                                return;
-                            }
-                        })        
-                    }                       
-                }, 500);
-            },
-        },
+        //         setTimeout(() => {
+        //             let dengons = []
+        //             dengons = this.get_memo_reservation.filter(item => {
+        //                 return item.room_type.match("dengon") && item.created_at == val
+        //             })
+        //             if (dengons.length) {
+        //                 dengons.forEach(item => {
+        //                     if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
+        //                         this.dengon1 = item
+        //                     } 
+        //                     else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
+        //                         this.dengon2 = item
+        //                     }
+        //                     else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
+        //                         this.dengon3 = item
+        //                     }
+        //                     else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
+        //                         this.dengon4 = item
+        //                     } else {
+        //                         return;
+        //                     }
+        //                 })        
+        //             }                       
+        //         }, 500);
+        //     },
+        // },
         methods: {
             update() {
                 this.$store.dispatch("load_schedule", {
@@ -289,7 +297,6 @@ header .h-sides p.h-caution {
 }
 header .dengon--wrapper .dengon--inner {
     padding: 5px;
-    background: white;    
 }
 header .dengon--wrapper .dengon--inner > button {
     background: #00008b;   
@@ -298,7 +305,7 @@ header .dengon--wrapper .dengon--inner > button {
     font-size: 14px;
 }
 
-header .dengon--wrapper .dengon--inner > input {
+header .dengon--wrapper .dengon--inner > span {
     width: 250px;
     font-size: 13px;
     height: 30px;

@@ -3,9 +3,9 @@
         <div class="blurred"></div>
         <div class="popup-frame add-member">
             <div @click="close_add_box()" class="flex align-ver align-hor close pointer"><i class="fas fa-times"></i></div>
-            <h3 class="popup-frame-title">備考入力フォーム</h3>
-            <textarea rows="4" cols="50" v-model="memo"></textarea>
-            <button @click="insert_memo()" class="popup-btn btn pointer">備考登録</button>
+            <h3 class="popup-frame-title">伝言入力フォーム</h3>
+            <textarea rows="4" cols="50" v-model="dengon"></textarea>
+            <button @click="insert_dengon()" class="popup-btn btn pointer">伝言登録</button>
             {{empty_txt}}
         </div>
     </div>
@@ -15,19 +15,19 @@ import { mapGetters } from 'vuex'
 export default {
     data(){
         return {
-            memo: "",
+            dengon: "",
         }
     },
     methods: {
         close_add_box(){
-            this.$store.state.meeting.add_memo_reservation = false
+            this.$store.state.meeting.add_dengon = false
         },
-        insert_memo(){
-            this.$store.state.meeting.add_memo_reservation = false
+        insert_dengon(){
+            this.$store.state.meeting.add_dengon = false
             let payload = {
                 "id": this.get_memo_reservation_obj.id,
                 "room_type": this.get_memo_reservation_obj.room_type,
-                "memo": this.memo,
+                "memo": this.dengon,
                 "created_at": this.get_selected_date
             }
             this.$store.dispatch("insert_reservation_memo", payload)
@@ -44,11 +44,10 @@ export default {
                 this.get_memo_reservation.forEach(item => {
                     if (this.get_memo_reservation_obj.room_type == item.room_type) {
                         this.get_memo_reservation_obj.id = item.id
-                        this.memo = item.memo
+                        this.dengon = item.memo
                     }
                 })           
             }
-
             return ""
         }
     }

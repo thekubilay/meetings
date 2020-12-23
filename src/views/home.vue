@@ -12,6 +12,7 @@
         </div>
         <app-add-meeting v-if="get_add_meeting == true" />
         <app-add-memo v-if="get_add_memo_reservation == true" />
+        <app-add-dengon v-if="get_add_dengon == true" />
     </div>
 </template>
 <script>
@@ -25,6 +26,7 @@ import appMeetingSix from '../components/meeting/meeting-room-6'
 import appMeetingSeven from '../components/meeting/meeting-room-7'
 import appAddMeeting from "../components/adds/add-meeting"
 import appAddMemo from "../components/adds/add-reservation-memo"
+import appAddDengon from "../components/adds/add-dengon"
 import { mapGetters } from 'vuex'
 export default {
     components: {
@@ -38,11 +40,13 @@ export default {
         appMeetingSeven,
         appAddMeeting,
         appAddMemo,
+        appAddDengon,
     },
     computed: {
         ...mapGetters([
             "get_add_meeting",
             "get_add_memo_reservation",
+            "get_add_dengon",
         ])
     }
 }
