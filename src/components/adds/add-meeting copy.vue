@@ -58,10 +58,10 @@
                 <p class="flex align-ver align-hor column-title">担当者</p>
                 <input class="column-input" maxlength="15" v-model="set_in_charge" type="text">
             </div>
-            <p class="err-txt" v-if="get_add_meeting_btn_check" style="white-space:pre-wrap; word-wrap:break-word;text-align:center;">{{error}}</p>
+            <p class="err-txt" v-if="check" style="white-space:pre-wrap; word-wrap:break-word;text-align:center;">{{error}}</p>
             <div class="flex between btn-wrap">
-                <button @click="insert_meeting(1)" v-if="!get_add_meeting_btn_check" class="btn schedule-btn">使用予定登録</button>
-                <button @click="insert_meeting(3)" v-if="get_add_meeting_btn_check" class="btn schedule-btn">上書きして登録</button>
+                <button @click="insert_meeting(1)" v-if="!check" class="btn schedule-btn">使用予定登録</button>
+                <button @click="insert_meeting(3)" v-if="check" class="btn schedule-btn btn_overwrite">上書き登録</button>
                 <button @click="insert_meeting(2)" class="btn red-bg">予定を削除</button>
             </div>
         </div>
@@ -72,7 +72,9 @@ import { mapGetters } from 'vuex'
 export default {
     data(){
         return {    
-            error: `すでに予約が入っています。\n登録すると予約は上書きされます。`,
+            error: `すでに予約が入っています。
+登録すると予約は上書きされます。`,
+            check: false,
         }
     },
     methods: {
@@ -89,154 +91,100 @@ export default {
 
         },
         insert_meeting(btn_type){
-            if (btn_type == 1){
-                // sent_backend_content_check_function
-                if (this.get_reservation.id == "") {
-                    // if there is no reservation then insert as a new  
-                    let payload = {
-                        "time_table": [],
-                        "people": this.get_reservation.people,
-                        "content": this.get_reservation.content,
-                        "in_charge": this.get_reservation.in_charge,
-                        "created_at": this.get_selected_date,
-                        "room_type": this.get_reservation.room_type,
-                        "content_id": this.get_reservation.content_id,
-                        "start_time": this.set_start_time,
-                        "finish_time": this.set_finish_time,
-                    }
+            if (btn_type == 1) {
+                
+                this.$store.dispatch("load_meeting_contents", {"date":this.get_selected_date})
 
-                    // arrange time table of meeting 
-                    // push it to child table as content time.
-                    this.get_times.forEach(element => {
-                        if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
-                            payload.time_table.push(element.time)
+                // contentCheck
+                let meetingsFirstArray = this.get_meetings;
+                let meetingsFirstArraytest = this.$store.state.meeting.reservation.room_type;
+                let meetingsSecondArray = [];
+                let meetingsExistTimeArray = [];
+                this.check = false;
+                
+                const self  = this
+                const targeTime = this.get_times.find((t) => t.time == this.set_finish_time);
+                const targeTimeId = parseInt(targeTime.id) - 1;
+                const targetFinishTimeId = this.get_times.find((v) => v.id == String(targeTimeId));
+                const targetFinishTime = targetFinishTimeId.time;
+
+                meetingsFirstArray.forEach(item => {
+                    meetingsSecondArray.push(item.plan_contents);
+                });
+                meetingsSecondArray.forEach( function( value, index ) {
+                    value.forEach(item => {
+                        if((item.content !== "") && (item.room_type == self.get_reservation.room_type)){
+                            let meetingsExistTime = item.time;
+                            if(meetingsExistTime >= self.set_start_time && meetingsExistTime <= targetFinishTime){
+                                meetingsExistTimeArray.push(meetingsExistTime);
+                            }
                         }
                     });
-
-                    // 30 min. one row arrange
-                    if (payload.time_table.length) {
-                        payload.time_table.pop()
-                    }
-
-                    // dispatch insert 
-                    this.$store.dispatch("insert_check_meeting", payload)
-                    .then((response) => {
-                        if(response == "202"){
-                            this.$store.state.meeting.add_meeting_btn_check = true
-                        }else{
-                            this.$store.state.meeting.reservation.id = ""
-                            this.$store.state.meeting.reservation.content_id = ""
-                            this.$store.state.meeting.reservation.finish_time = ""
-                            this.$store.state.meeting.reservation.people = ""
-                            this.$store.state.meeting.reservation.content = ""
-                            this.$store.state.meeting.reservation.in_charge = ""
-                            this.$store.state.meeting.reservation.room_type = ""
-                            this.$store.state.meeting.add_meeting = false
+                });
+                if(meetingsExistTimeArray.length) {
+                    self.check = true
+                }else{
+                    self.check = false;
+                    if (this.get_reservation.id == "") {
+                        // if there is no reservation then insert as a new  
+                        let payload = {
+                            "time_table": [],
+                            "people": this.get_reservation.people,
+                            "content": this.get_reservation.content,
+                            "in_charge": this.get_reservation.in_charge,
+                            "created_at": this.get_selected_date,
+                            "room_type": this.get_reservation.room_type,
                         }
-                    })
 
-                } else {
-                    // update selected content etc
-                    let payload = {
-                        "time_table": [],   
-                        "id": this.get_reservation.id,
-                        "finish_time": this.get_reservation.finish_time,
-                        "content_id": this.get_reservation.content_id,
-                        "people": this.get_reservation.people,
-                        "content": this.get_reservation.content,
-                        "in_charge": this.get_reservation.in_charge,
-                        "room_type": this.get_reservation.room_type,
-                        "created_at": this.get_selected_date,
-                    }
+                        // arrange time table of meeting 
+                        // push it to child table as content time.
+                        this.get_times.forEach(element => {
+                            if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
+                                payload.time_table.push(element.time)
+                            }
+                        });
 
-                    // arrange time table of meeting 
-                    // push it to child table as content time.
-                    this.get_times.forEach(element => {
-                        if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
-                            payload.time_table.push(element.time)
+                        // 30 min. one row arrange
+                        if (payload.time_table.length) {
+                            payload.time_table.pop()
                         }
-                    });
 
-                    // 30 min. one row arrange
-                    if (payload.time_table.length) {
-                        payload.poped = payload.time_table.pop()
+                        // dispatch insert 
+                        this.$store.dispatch("insert_meeting", payload)
+
+                    } else {
+                        // update selected content etc
+                        let payload = {
+                            "time_table": [],   
+                            "id": this.get_reservation.id,
+                            "finish_time": this.get_reservation.finish_time,
+                            "content_id": this.get_reservation.content_id,
+                            "people": this.get_reservation.people,
+                            "content": this.get_reservation.content,
+                            "in_charge": this.get_reservation.in_charge,
+                            "room_type": this.get_reservation.room_type,
+                            "created_at": this.get_selected_date,
+                        }
+
+                        // arrange time table of meeting 
+                        // push it to child table as content time.
+                        this.get_times.forEach(element => {
+                            if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
+                                payload.time_table.push(element.time)
+                            }
+                        });
+
+                        // 30 min. one row arrange
+                        if (payload.time_table.length) {
+                            payload.poped = payload.time_table.pop()
+                        }
+                        // dispatch insert 
+                        this.$store.dispatch("update_meeting", payload)  
                     }
+                } 
 
-                    // dispatch insert 
-                    this.$store.dispatch("update_meeting", payload)                  
-                }
             }
-            else if (btn_type == 3) {
-                // sent_insert_meeting_function
-                if (this.get_reservation.id == "") {
-                    // if there is no reservation then insert as a new  
-                    let payload = {
-                        "time_table": [],
-                        "people": this.get_reservation.people,
-                        "content": this.get_reservation.content,
-                        "in_charge": this.get_reservation.in_charge,
-                        "created_at": this.get_selected_date,
-                        "room_type": this.get_reservation.room_type,
-                        "content_id": this.get_reservation.content_id,
-                    }
-
-                    // arrange time table of meeting 
-                    // push it to child table as content time.
-                    this.get_times.forEach(element => {
-                        if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
-                            payload.time_table.push(element.time)
-                        }
-                    });
-
-
-                    // 30 min. one row arrange
-                    if (payload.time_table.length) {
-                        payload.time_table.pop()
-                    }
-
-                    // dispatch insert 
-                    this.$store.dispatch("insert_meeting", payload)
-
-                    // close form
-                    // refresh vars
-                    this.close_add_box()  
-
-                } else {
-                    // update selected content etc
-                    let payload = {
-                        "time_table": [],   
-                        "id": this.get_reservation.id,
-                        "finish_time": this.get_reservation.finish_time,
-                        "content_id": this.get_reservation.content_id,
-                        "people": this.get_reservation.people,
-                        "content": this.get_reservation.content,
-                        "in_charge": this.get_reservation.in_charge,
-                        "room_type": this.get_reservation.room_type,
-                        "created_at": this.get_selected_date,
-                    }
-
-                    // arrange time table of meeting 
-                    // push it to child table as content time.
-                    this.get_times.forEach(element => {
-                        if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
-                            payload.time_table.push(element.time)
-                        }
-                    });
-
-                    // 30 min. one row arrange
-                    if (payload.time_table.length) {
-                        payload.poped = payload.time_table.pop()
-                    }
-
-                    // dispatch insert 
-                    this.$store.dispatch("update_meeting", payload)   
-
-                    // close form
-                    // refresh vars
-                    this.close_add_box()              
-                }
-            } 
-            else {
+            else if(btn_type == 2) {
                 let payload = {
                     "id": this.get_reservation.id,
                     "finish_time": this.get_reservation.finish_time,
@@ -245,19 +193,53 @@ export default {
 
                 // remove selected event
                 this.$store.dispatch("delete_meeting", payload)
-
-                // close form
-                // refresh vars
-                this.close_add_box()
             }
-            
+            else{
+                // update selected content etc
+                let payload = {
+                    "time_table": [],   
+                    "id": this.get_reservation.id,
+                    "finish_time": this.get_reservation.finish_time,
+                    "content_id": this.get_reservation.content_id,
+                    "people": this.get_reservation.people,
+                    "content": this.get_reservation.content,
+                    "in_charge": this.get_reservation.in_charge,
+                    "room_type": this.get_reservation.room_type,
+                    "created_at": this.get_selected_date,
+                }
+
+                // arrange time table of meeting 
+                // push it to child table as content time.
+                this.get_times.forEach(element => {
+                    if (element.time >= this.get_reservation.start_time && element.time <= this.get_reservation.finish_time) {
+                        payload.time_table.push(element.time)
+                    }
+                });
+
+                // 30 min. one row arrange
+                if (payload.time_table.length) {
+                    payload.poped = payload.time_table.pop()
+                }
+                // dispatch insert 
+                    this.$store.dispatch("update_meeting", payload)   
+            }
+
+            // close form
+            // refresh vars
+            this.$store.state.meeting.reservation.id = ""
+            this.$store.state.meeting.reservation.finish_time = ""
+            this.$store.state.meeting.reservation.people = ""
+            this.$store.state.meeting.reservation.content = ""
+            this.$store.state.meeting.reservation.in_charge = ""
+            this.$store.state.meeting.reservation.room_type = ""
+            this.$store.state.meeting.add_meeting = false
         },
         contentCheck(){
             let meetingsFirstArray = this.$store.state.meeting.meetings;
             let meetingsFirstArraytest = this.$store.state.meeting.reservation.room_type;
             let meetingsSecondArray = [];
             let meetingsExistTimeArray = [];
-            this.$store.state.meeting.add_meeting_btn_check = false
+            this.check = false;
             
             const self  = this
             const targeTime = this.get_times.find((t) => t.time == this.set_finish_time);
@@ -279,9 +261,9 @@ export default {
                 });
             });
             if(meetingsExistTimeArray.length !== 0) {
-                this.$store.state.meeting.add_meeting_btn_check = true;
+                self.check = true;
             }else{
-                this.$store.state.meeting.add_meeting_btn_check = false;
+                self.check = false;
             }
         }
     },
@@ -296,8 +278,7 @@ export default {
             "get_setting_load",
             "get_reservation_start_time",
             "get_reservation_finish_time",
-            "get_reservation_people",
-            "get_add_meeting_btn_check",
+            "get_reservation_people"
         ]),
         time_after(){
             let times_arr = []
@@ -533,6 +514,10 @@ export default {
     margin: 20px 0 10px 0;
     text-align: center;
     color: red;
+}
+
+button.btn_overwrite{
+    background-color: red !important;
 }
 
 @media screen and (max-width: 414px){

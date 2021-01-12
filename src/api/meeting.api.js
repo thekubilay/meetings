@@ -18,6 +18,13 @@ export default {
         axios.defaults.headers.common["authorization"] = basicAuth
         return axios.post(API_HANDLER.database_api+"meeting/read-content.php", JSON.stringify(payload))
     },
+    insert_check_meeting_into_db(payload){
+        const username = "pj-room"
+        const password = "X4taLdr"
+        var basicAuth = 'Basic ' + btoa(username + ':' + password);
+        axios.defaults.headers.common["authorization"] = basicAuth
+        return axios.post(API_HANDLER.database_api+"meeting/insert_check.php", JSON.stringify(payload))
+    },
     insert_meeting_into_db(payload){
         const username = "pj-room"
         const password = "X4taLdr"

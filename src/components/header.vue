@@ -73,75 +73,8 @@
                 nextWeek_counter: 7,
                 yesterday_counter: 1,
                 tomorrow_counter: 1,
-                // dengon1:{id: "", room_type: "dengon1", memo:""}, 
-                // dengon2:{id: "", room_type: "dengon2", memo:""}, 
-                // dengon3:{id: "", room_type: "dengon3", memo:""}, 
-                // dengon4:{id: "", room_type: "dengon4", memo:""}, 
             };
         },
-        // mounted(){
-        //     this.dengon1 = {id: "", room_type: "dengon1", memo:""}
-        //     this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
-        //     this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
-        //     this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
-        //     setTimeout(() => {
-        //         let dengons = []
-        //         dengons = this.get_memo_reservation.filter(item => {
-        //             return item.room_type.match("dengon") && item.created_at == this.get_selected_date
-        //         })
-        //         if (dengons.length) {
-        //             dengons.forEach(item => {
-        //                 if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
-        //                     this.dengon1 = item
-        //                 } 
-        //                 else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
-        //                     this.dengon2 = item
-        //                 }
-        //                 else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
-        //                     this.dengon3 = item
-        //                 }
-        //                 else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
-        //                     this.dengon4 = item
-        //                 } else {
-        //                     return;
-        //                 }
-        //             })        
-        //         }                       
-        //     }, 500);
-        // },
-        // watch: {
-        //     get_selected_date(val){
-        //         this.dengon1 = {id: "", room_type: "dengon1", memo:""}
-        //         this.dengon2 = {id: "", room_type: "dengon2", memo:""}, 
-        //         this.dengon3 = {id: "", room_type: "dengon3", memo:""}, 
-        //         this.dengon4 = {id: "", room_type: "dengon4", memo:""}, 
-
-        //         setTimeout(() => {
-        //             let dengons = []
-        //             dengons = this.get_memo_reservation.filter(item => {
-        //                 return item.room_type.match("dengon") && item.created_at == val
-        //             })
-        //             if (dengons.length) {
-        //                 dengons.forEach(item => {
-        //                     if (item.room_type == "dengon1" && item.created_at == this.get_selected_date) {
-        //                         this.dengon1 = item
-        //                     } 
-        //                     else if (item.room_type == "dengon2" && item.created_at == this.get_selected_date) {
-        //                         this.dengon2 = item
-        //                     }
-        //                     else if (item.room_type == "dengon3" && item.created_at == this.get_selected_date) {
-        //                         this.dengon3 = item
-        //                     }
-        //                     else if (item.room_type == "dengon4" && item.created_at == this.get_selected_date) {
-        //                         this.dengon4 = item
-        //                     } else {
-        //                         return;
-        //                     }
-        //                 })        
-        //             }                       
-        //         }, 500);
-        //     },
-        // },
         methods: {
             update() {
                 this.$store.dispatch("load_schedule", {

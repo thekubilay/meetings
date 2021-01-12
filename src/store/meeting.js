@@ -26,6 +26,7 @@ export const meeting = {
         },
         add_meeting: false,        
         meeting_load: 0,
+        add_meeting_btn_check: false,   
 
         // memo
         memo_reservation: [],
@@ -98,6 +99,9 @@ export const meeting = {
         set_add_meeting(state, add){
             state.add_meeting = add
         },
+        set_add_meeting_btn_check(state, add){
+            state.add_meeting_btn_check = add
+        },
         set_memo_reservation(state, memo){
             state.memo_reservation = memo
         },
@@ -148,6 +152,9 @@ export const meeting = {
         get_add_meeting(state){
             return state.add_meeting
         },
+        get_add_meeting_btn_check(state){
+            return state.add_meeting_btn_check
+        },
         get_memo_reservation(state){
             return state.memo_reservation
         },
@@ -194,6 +201,18 @@ export const meeting = {
             .catch(err => {
                 console.log(err)
                 this.commit("set_meeting_load", 3)
+            })
+        },
+        insert_check_meeting({commit, dispatch, getters}, payload){
+            return new Promise((resolve, reject) => {
+                meetingApi.insert_check_meeting_into_db(payload)
+                .then((response) => {
+                    dispatch("load_meeting_contents", {"date":getters.get_selected_date})
+                    resolve(response.data.status)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
             })
         },
         insert_meeting({commit, dispatch, getters}, payload){
